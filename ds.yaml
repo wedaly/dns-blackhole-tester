@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: dns-blackhole-tester
+  labels:
+    app: dns-blackhole-tester
+spec:
+  selector:
+    matchLabels:
+      name: dns-blackhole-tester
+  template:
+    metadata:
+      labels:
+        name: dns-blackhole-tester
+    spec:
+      hostNetwork: true
+      containers:
+      - name: dns-blackhole-tester
+        image: "" # replace this with dns-blackhole-tester image in a container registry
+        command: ["./dns-blackhole-tester"]
+        args: ["-d", "10.0.0.10:53", "-n", "kubernetes.default.svc.cluster.local."]
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN", "NET_RAW"]
